@@ -1,8 +1,7 @@
-*.sqlite3
+db.sqlite3
 _pycache_/
 *._pyc
 *.log
-
 .DS_Store
 .installed.cfg
 ._*
