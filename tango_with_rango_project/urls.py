@@ -21,5 +21,6 @@ from rango import views # Added by JNR 18.01.2018
 urlpatterns = [
     url(r'^$', views.index, name='index'), # Added by JNR 18.01.2018
     url(r'^rango/', include('rango.urls')), # Added by JNR 18.01.2018
+    # Note - the above maps any URLs starting with rango/ to be handled by the rango app
     url(r'^admin/', admin.site.urls),
 ]
