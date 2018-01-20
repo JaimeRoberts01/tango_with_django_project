@@ -17,10 +17,12 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.conf.urls import include # Added by JNR 10.01.2018
 from rango import views # Added by JNR 18.01.2018
+from django.conf import settings # Added by JNR 20.01.2018
+from django.conf.urls.static import static # Added by JNR 20.01.2018
 
 urlpatterns = [
     url(r'^$', views.index, name='index'), # Added by JNR 18.01.2018
     url(r'^rango/', include('rango.urls')), # Added by JNR 18.01.2018
     # Note - the above maps any URLs starting with rango/ to be handled by the rango app
     url(r'^admin/', admin.site.urls),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # Added by JNR 20.01.2018
