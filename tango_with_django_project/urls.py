@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from django.conf.urls import include # Added by JNR 10.01.2018
+from django.conf.urls import include # Added by JNR 18.01.2018
 from rango import views # Added by JNR 18.01.2018
 from django.conf import settings # Added by JNR 20.01.2018
 from django.conf.urls.static import static # Added by JNR 20.01.2018
