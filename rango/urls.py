@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from rango import views
 
+app_name = 'rango' # Added by JNR 25.01.2018
 urlpatterns = [
     url(r'^$', views.index, name='index'), # Created by JNR 18.01.2018
     url(r'^about/$', views.about, name='about'), # Created by JNR 18.01.2018
