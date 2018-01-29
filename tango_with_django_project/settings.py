@@ -129,3 +129,7 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = MEDIA_DIR # Added by JNR 20.01.2018
 MEDIA_URL = '/media/' # Added by JNR 20.01.2018
+
+# Login
+
+LOGIN_URL = '/accounts/login/' # Added by JNR 29.01.2018

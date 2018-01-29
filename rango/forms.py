@@ -1,5 +1,6 @@
 from django import forms # Created by JNR 23.01.2018
-from rango.models import Page, Category
+from django.contrib.auth.models import User # Added by JNR 29.01.2018
+from rango.models import Page, Category, UserProfile
 
 class CategoryForm(forms.ModelForm):
     name = forms.CharField(max_length=128, help_text="Please enter the category name.")
@@ -41,3 +42,19 @@ class PageForm(forms.ModelForm):
             url = 'http://' + urls
 
             return cleaned_data
+
+class UserForm(forms.ModelForm): # Added 29.01.2018
+    password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password')
+
+class UserProfileForm(forms.ModelForm):# Added 29.01.2018
+    class Meta:
+        model = UserProfile
+        fields = ('website', 'picture')
+
+
+
+
