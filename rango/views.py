@@ -18,13 +18,49 @@ from django.core.urlresolvers import reverse # Added by JNR 29.01.2018
 from django.contrib.auth.decorators import login_required # Added by JNR 29.01.2018
 # Logout
 from django.contrib.auth import logout # Added by JNR 29.01.2018
+# Date/time
+from datetime import datetime # Added by JNR 30.01.2018
+
+# ----------------------------------------------------------- #
+
+def get_server_side_cookie(request, cookie, default_val=None): # A helper method
+    val = request.session.get(cookie)
+    if not val:
+       val = default_val
+    return val
+
+# ----------------------------------------------------------- #
+
+# Updated the function definition
+def visitor_cookie_handler(request):
+    visits = int(get_server_side_cookie(request, 'visits', '1'))
+    last_visit_cookie = get_server_side_cookie(request,
+                                               'last_visit',
+                                               str(datetime.now()))
+    last_visit_time = datetime.strptime(last_visit_cookie[:-7],
+                                        '%Y-%m-%d %H:%M:%S')
+        
+    # If it's been more than a day since the last visit...
+    if (datetime.now() - last_visit_time).days > 0:
+        visits = visits + 1
+        # Update the last visit cookie now that we have updated the count
+        request.session['last_visit'] = str(datetime.now())
+    else:
+        visits = 1
+        # set the last visit cookie
+        request.session['last_visit'] = last_visit_cookie 
+
+    # Update/set the visits cookie
+    request.session['visits'] = visits
 
 # ----------------------------------------------------------- #
 
 def index(request):
+   
+    request.session.set_test_cookie() # Added by JNR 30.01.2018
+    
     # Construct a dictionary to pass to the template engine as its context.
     # The key boldmessage is the same as {{ boldmessage}} in the template.
-
     # context_dict = {'boldmessage': "Crunchy, creamy, cookie, candy, cupcake!"} # Added by JNR 20.01.2018 and commented out 23.01.2018
 
     # Return a rendered response to sent to the client.
@@ -36,19 +72,35 @@ def index(request):
     page_list = Page.objects.order_by('-views') [:5]
     context_dict = {'categories': category_list, 'pages':page_list}
 
-# return render(request, 'rango/index.html', context=context_dict) # Added by JNR 20.01.2018 and commented out 23.01.2018
+    
+    # return render(request, 'rango/index.html', context=context_dict) # Added by JNR 20.01.2018 and commented out 23.01.2018
+    # return HttpResponse("Rango says hey there partner! <br/> <a href='/rango/about/'>About</a>") # Added 18.01.2018 and commented out 20.01.2018
 
-    return render(request, 'rango/index.html', context_dict)
-
-# return HttpResponse("Rango says hey there partner! <br/> <a href='/rango/about/'>About</a>") # Added 18.01.2018 and commented out 20.01.2018
+    # Call the helper function to handle the cookies
+    visitor_cookie_handler(request) # Added by JNR 30.01.2018
+    context_dict['visits'] = request.session['visits']
+    # Return response back to the user, updating any cookies that need changed.
+    #return render(request, 'rango/index.html', context_dict) # Added by JNR 30.01.2018
+    response = render(request, 'rango/index.html', context=context_dict) # Added by JNR 30.01.2018
+    return response
 
 # ----------------------------------------------------------- #
 
 def about(request):
+    request.session.set_test_cookie()
+    
+    if request.session.test_cookie_worked(): # Added by JNR 30.01.2018
+        print("TEST COOKIE WORKED!")
+        request.session.delete_test_cookie()
+    
+
+    visitor_cookie_handler(request) # Added by JNR 30.01.2018
+    context_dict = {}
+    context_dict['visits'] = request.session['visits']
 
     # Query the database for a list of ALL categories currently stored.
-
-    return render(request, 'rango/about.html')
+    response = render(request, 'rango/about.html', context=context_dict)
+    return response
 #return HttpResponse("Rango says here is the about page. <br/> <a href='/rango/'>Index</a>") # Added 18.01.18
 
 # ----------------------------------------------------------- #
@@ -250,6 +302,7 @@ def user_login(request):
 def restricted(request):
     #return HttpResponse("Since you're logged in, you can see this text!")
     return render(request, 'rango/restricted.html', {}) # Added by JNR 29.01.2018
+
 # ----------------------------------------------------------- #
 
 @login_required # Added by JNR 29.01.2018
@@ -258,7 +311,3 @@ def user_logout(request):
     logout(request)
     # Take the user back to the homepage.
     return HttpResponseRedirect(reverse('index'))
-
-
-
-

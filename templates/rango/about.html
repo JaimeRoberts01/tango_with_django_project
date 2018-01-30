@@ -8,6 +8,9 @@
 {% block body_block %}
   <div>
       <h1>Rango says here is the about page</h1>
+        <div>
+          <p>You have viewed this site: {{visits}}</p>
+        </div>
           <img src='{% static 'images/rango2.jpg' %}'
                alt='Picture of Rango' />
           <img src='{{MEDIA_URL}}cat.jpg'
