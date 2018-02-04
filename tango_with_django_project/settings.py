@@ -132,4 +132,4 @@ MEDIA_URL = '/media/' # Added by JNR 20.01.2018
 
 # Login
 
-LOGIN_URL = '/accounts/login/' # Added by JNR 29.01.2018
+LOGIN_URL = '/rango/login/' # Added by JNR 29.01.2018

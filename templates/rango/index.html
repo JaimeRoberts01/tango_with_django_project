@@ -18,6 +18,10 @@
       {% endif %}
       </div>
       
+      <div>
+        <p>visits: {{visits}}</p>
+      </div>
+
       <h2>Most Liked Categories:</h2>
       <div>
       {% if categories %}
@@ -39,7 +43,7 @@
       <ul>
           {% for page in pages %}
           <li>
-          <a href='{{ page.url }}'>{{ page.title}}</a>
+          <a href="{{ page.url }}">{{ page.title}}</a>
           </li>
           {% endfor %}
       </ul>
@@ -50,7 +54,7 @@
 
       <div>
           <!--<a href="{% url 'rango:about' %}">About</a><br /> -->
-          <img src='{% static 'images/rango.jpg' %}'
-               alt='Picture of Rango' /> 
+          <img src="{% static "images/rango.jpg" %}"
+               alt="Picture of Rango" /> 
       </div>
 {% endblock %}
